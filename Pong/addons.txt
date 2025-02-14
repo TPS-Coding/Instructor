@@ -1,0 +1,138 @@
+Here is where you will find some options on how to customize your game.
+
+1. Adding a player 2:
+
+in sprites.py, you have to add another class. You can copy/paste the existing player
+class, rename it, and change the keys in the move method. Use s and w as they are standard for down and up, respectively
+you also have to give it a position
+----
+class Player2(Paddle):
+    def __init__(self,groups):
+        super().__init__(groups)
+
+
+        self.speed = SPEED['player']
+        self.rect.center = POS['opponent']
+
+    
+    def get_direction(self):
+        keys = pygame.key.get_pressed()
+        self.direction = int(keys[pygame.K_s]) - int(keys[pygame.K_w])
+
+-----
+Now go to main.py and create the Player2, make sure to also import from sprites and comment out
+the self.opponent (the cpu paddle)
+
+from sprites import Player, Ball, Opponent, Player2
+
+
+#sprites
+        self.player = Player((self.all_sprites,self.paddle_sprites))
+        self.ball = Ball(self.all_sprites, self.paddle_sprites)
+
+        #self.opponent = Opponent((self.all_sprites,self.paddle_sprites),self.ball)
+        self.player2 = Player2((self.all_sprites, self.paddle_sprites))
+
+
+
+2. Making the ball faster everytime it hits a paddle. 
+
+In sprites.py, go to the Ball class and inside the def collision function add:
+
+you will also need to add
+self.speed = SPEED['ball] in the init method
+
+as well as change SPEED['ball] to self.speed in the move method
+
+--------
+ def collision(self, direction):
+        for sprite in self.paddle_sprites:
+            if sprite.rect.colliderect(self.rect):
+                if direction == 'horizontal':
+add this line----->     self.speed += 20
+                    if self.rect.right >= sprite.rect.left and self.direction.x == 1:
+                        self.rect.right = sprite.rect.left
+            
+                    if self.rect.left <= sprite.rect.right and self.direction.x == -1:
+                        self.rect.left = sprite.rect.right
+                        
+                    self.direction.x *= -1
+
+
+---------
+You may have to play around with the number for the speed. But also remember that when a point is
+scored and the ball resets to the middle, you must also reset the speed to the original or it
+will continue to get faster and faster. 
+So in main.py add  self.ball.speed = SPEED['ball'] to def score(self):
+
+-----
+def score(self):
+
+        if self.ball.rect.right <= 0:
+            self.player_score += 1
+            self.ball.rect.center = (WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+            self.ball.speed = SPEED['ball]
+        if self.ball.rect.left >= WINDOW_WIDTH:
+            self.cpu_score += 1
+            self.ball.rect.center = (WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+            self.ball.speed = SPEED['ball]
+
+------
+
+3. Add obstacles to the game board, i.e. stationary paddles
+
+create an Obstacle class in sprites.py like so
+
+-----
+class Obstacle(Paddle):
+    def __init__(self, groups, pos):
+        super().__init__(groups)
+
+        self.rect.center = pos
+        self.speed = 0
+
+    def get_direction(self):
+        self.direction = 0
+
+-----
+
+Now in main.py you must create these sprites. They are the same as the player and player2, 
+except that you also have to pass in a position. make sure you remember to import from sprites
+
+from sprites import Player, Ball, , Opponent, Obstacle
+
+
+----
+
+        #sprites
+        self.player = Player((self.all_sprites,self.paddle_sprites))
+        self.ball = Ball(self.all_sprites, self.paddle_sprites)
+
+        self.opponent = Opponent((self.all_sprites,self.paddle_sprites),self.ball)
+
+        ## (x,y) coordinates for the obstacles
+        pos1 = (WINDOW_WIDTH/2, WINDOW_HEIGHT*0.3)
+        pos2 = (WINDOW_WIDTH/2, WINDOW_HEIGHT*0.7)
+
+        ## obstacle sprites
+        Obstacle((self.all_sprites,self.paddle_sprites), pos1)
+        Obstacle((self.all_sprites,self.paddle_sprites), pos2)
+
+
+----
+
+you will also need to move the self.display_score() above the self.all_sprites.draw()
+or the lines will be drawn over the obstacles. In pygame the order that you draw the sprites
+matter.
+
+----
+
+            # draw
+            self.display_surface.fill(COLORS["bg"])
+            self.display_score()
+            self.all_sprites.draw(self.display_surface)
+
+----
+            
+            
+
