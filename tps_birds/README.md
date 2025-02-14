@@ -4,4 +4,3 @@
 
 #### This code will not work with python 2 or pygame
 
-#### The graphics assets included can NOT be used for commercial purposes
