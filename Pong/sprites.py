@@ -7,14 +7,15 @@ class Paddle(pygame.sprite.Sprite):
         super().__init__(groups)
 
         ## image
-        self.image = pygame.Surface(SIZE['paddle'])
-        self.image.fill(COLORS['paddle'])
+        self.image = pygame.Surface(SIZE['paddle'], pygame.SRCALPHA)
+        #self.image.fill(COLORS['paddle'])
+        pygame.draw.rect(self.image, COLORS['paddle'], pygame.Rect(0,0,40,100),border_radius=20)
 
 
         ## rect and movement
         self.direction = 0 
         self.rect = self.image.get_frect(center=POS['player'])
-
+        
 
     def move(self, dt):
         self.rect.centery += self.direction * self.speed * dt
@@ -37,8 +38,6 @@ class Player(Paddle):
     def get_direction(self):
         keys = pygame.key.get_pressed()
         self.direction = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
-
-
 
 
 class Ball(pygame.sprite.Sprite):
@@ -130,7 +129,7 @@ class Obstacle(Paddle):
         super().__init__(groups)
 
         self.image = pygame.Surface(SIZE['obstacle'])
-        self.image.fill(COLORS['paddle'])
+        self.image.fill(COLORS['obs'])
 
         self.rect = self.image.get_frect(center = pos)
 

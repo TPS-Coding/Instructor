@@ -49,16 +49,18 @@ class Game():
 
     def display_score(self):
         player_surf = self.font.render(str(self.player_score),True,'white')
-        player_rect = player_surf.get_frect(center = (WINDOW_WIDTH*0.6, WINDOW_HEIGHT/2))
+        player_rect = player_surf.get_frect(center = (WINDOW_WIDTH*0.6, WINDOW_HEIGHT*0.1))
         self.display_surface.blit(player_surf,player_rect)
 
         cpu_surf = self.font.render(str(self.cpu_score), True, 'white')
-        cpu_rect = cpu_surf.get_frect(center = (WINDOW_WIDTH*0.4, WINDOW_HEIGHT/2))
+        cpu_rect = cpu_surf.get_frect(center = (WINDOW_WIDTH*0.4, WINDOW_HEIGHT*0.1))
         self.display_surface.blit(cpu_surf, cpu_rect)
 
         start = (WINDOW_WIDTH/2, 0)
         end = (WINDOW_WIDTH/2, WINDOW_HEIGHT)
-        pygame.draw.line(self.display_surface, 'white', start, end, 10)
+        pygame.draw.line(self.display_surface, 'black', start, end, 5)
+        #surface, color, center, radius
+        #pygame.draw.circle(self.display_surface,COLORS['bg detail'],(WINDOW_WIDTH/2,WINDOW_HEIGHT/2),60)
 
     def run(self):
         while self.running:
@@ -75,6 +77,7 @@ class Game():
 
             # draw
             self.display_surface.fill(COLORS["bg"])
+            pygame.draw.circle(self.display_surface,COLORS['bg detail'],(WINDOW_WIDTH/2,WINDOW_HEIGHT/2),160)
             self.display_score()
             self.all_sprites.draw(self.display_surface)
             

@@ -9,8 +9,9 @@ POS = {"player": (WINDOW_WIDTH -50, WINDOW_HEIGHT/2),
         "opponent": (50, WINDOW_HEIGHT/2)}
 
 COLORS = {
-        "paddle": "#ee322c",
-        "ball": "#ee622c",
-        "bg": "#002633",
-        "bg detail": "#004a63"
+        "paddle": "#ffffff",
+        "ball": "#f3d55b",
+        "bg": "#26b99a",
+        "bg detail": "#81ccab",
+        "obs": "#143D60",
 }
