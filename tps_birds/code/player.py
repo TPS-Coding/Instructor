@@ -12,7 +12,6 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 10
 
     def apply_gravity(self,dt):
-        ## direction here is actually velocity, should be self.velocity
         self.velocity += self.gravity * dt
         self.pos.y += self.velocity * dt
         self.rect.y = round(self.pos.y)
